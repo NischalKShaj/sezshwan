@@ -11,7 +11,6 @@ const app = express()
 
 app.use(express.json())
 
-
 // setting the view page and the path
 
 app.set('view engine', 'ejs')
@@ -26,9 +25,9 @@ app.get('/',(req ,res)=>{
 
 
 // Testing whether the rendering is working or not
-// app.post('/home',(req, res)=>{
-//     res.render('home')
-// })
+app.post('/home',(req, res)=>{
+    res.render('home')
+})
 
 // rendering the signup page
 
