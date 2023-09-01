@@ -24,10 +24,6 @@ app.get('/',(req ,res)=>{
 }) 
 
 
-// Testing whether the rendering is working or not
-app.post('/home',(req, res)=>{
-    res.render('home')
-})
 
 // rendering the signup page
 
@@ -37,25 +33,25 @@ app.get('/signup',(req, res)=>{
 
 // rendering the login page
 
-app.post('/',(req ,res)=>{
-    res.render('login')
-})
+// app.post('/',(req ,res)=>{
+//     res.render('login')
+// })
 
 // loading the mongodb file in the database
 
-app.post('/signin', async(req, res)=>{
-    try{
+app.post('/home', async(req, res)=>{
+
 
         const data ={
             name : req.body.name,
             password : req.body.password,
+
+            
         }
+        console.log(data)
         await collection.insertMany([data])     // inserting the values from the page to the login page
         res.render('home')
-    }catch(error){                              // to check whether any error took place while connecting with the mongodb
-        console.error("Error inserting the data", error)
-        res.status(500).send("Error inserting the data")
-    }
+
 
 })
 
