@@ -5,10 +5,10 @@ const mongoose = require('mongoose')
 // connecting the mongodb with the node
 
 mongoose.connect("mongodb://localhost:27017/userDetail")
-.then(()=>{                                                      //for checking the connection is true using the promise 
+.then(()=>{                                                   //for checking the connection is true using the promise 
     console.log("Mongodb is now connected properly");
 })
-.catch(()=>{                                                      //for checking the connection is failed using the promise
+.catch(()=>{                                                  //for checking the connection is failed using the promise
     console.log("Mongodb is not connected properly");
 })
 

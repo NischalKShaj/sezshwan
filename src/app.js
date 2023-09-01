@@ -15,7 +15,7 @@ app.use(express.json())
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname,'..', 'views'));
-
+app.use(express.urlencoded({extended :false}))
 
 // rendering the login page
 
@@ -35,6 +35,12 @@ app.get('/signup',(req, res)=>{
     res.render('signup')
 })
 
+// rendering the login page
+
+app.post('/',(req ,res)=>{
+    res.render('login')
+})
+
 // loading the mongodb file in the database
 
 app.post('/signin', async(req, res)=>{
@@ -46,7 +52,7 @@ app.post('/signin', async(req, res)=>{
         }
         await collection.insertMany([data])     // inserting the values from the page to the login page
         res.render('home')
-    }catch(error){
+    }catch(error){                              // to check whether any error took place while connecting with the mongodb
         console.error("Error inserting the data", error)
         res.status(500).send("Error inserting the data")
     }
@@ -56,5 +62,5 @@ app.post('/signin', async(req, res)=>{
 // connecting with the port
 
 app.listen(4000, ()=>{
-    console.log("Server connected....!");
+    console.log("Server connected to the port 4000....!");
 })
