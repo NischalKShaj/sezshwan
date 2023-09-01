@@ -31,15 +31,11 @@ app.get('/signup',(req, res)=>{
     res.render('signup')
 })
 
-// rendering the login page
 
-// app.post('/',(req ,res)=>{
-//     res.render('login')
-// })
 
-// loading the mongodb file in the database
+// loading the new values from the signup page to the database 
 
-app.post('/home', async(req, res)=>{
+app.post('/', async(req, res)=>{
 
 
         const data ={
@@ -49,11 +45,37 @@ app.post('/home', async(req, res)=>{
             
         }
         console.log(data)
-        await collection.insertMany([data])     // inserting the values from the page to the login page
-        res.render('home')
+        await collection.insertMany([data])     // inserting the values from the page to the sign-in page
+        res.redirect('/')
 
 
 })
+
+// rendering the homepage if username and password is correct
+
+app.post('/home', async(req ,res)=>{
+
+    try{
+        const check = await collection.findOne({name : req.body.name})
+        console.log(check);
+
+        
+            if(check.password === req.body.password){
+                res.render('home')
+                console.log('Welcome user')
+            } else {
+                res.redirect('signup')
+                console.log('invalid user')
+            }
+        
+
+    } catch {
+        res.send('Unexpected error')
+    }
+
+})
+
+
 
 // connecting with the port
 
