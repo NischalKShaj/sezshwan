@@ -1,8 +1,6 @@
 // importing the modules
-
 require('dotenv').config()
 const express = require('express')
-// const expressLayouts = require('express-ejs-layouts')
 const path = require('path')
 const ejs = require('ejs')
 const collection = require('./mongodb')
@@ -16,11 +14,9 @@ app.use(express.urlencoded({extended :true}))
 app.use(express.json())
 
 // setting the static files
-
 app.use(express.static('public'))
 
 // setting the view page and the path
-
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname,'..', 'views'));
 
@@ -30,7 +26,6 @@ app.set('views', path.join(__dirname,'..', 'views'));
 app.get('/',(req ,res)=>{
     res.render('login')
 }) 
-
 
 
 // rendering the signup page
@@ -74,7 +69,7 @@ app.post('/home', async(req ,res ,next)=>{
         console.log(check);
         
             if(check.name === req.body.name && check.password === req.body.password){
-                res.render('home')
+                res.render('home',{check})
                 console.log('Welcome user')
                 console.log(check);
             } else {
@@ -86,34 +81,25 @@ app.post('/home', async(req ,res ,next)=>{
         res.redirect('/')
     }
 
-    
-
 })
-
-
-
 
 
 // admin credentials..
 const admin_details = {
         name1 :'Nischal',
         password1 : 'red',
+        role : 'admin'
     }
     
-
-
-
-
-
-// rendering the admin page by the password which is already set
+// rendering the adminpanel with the credentials 
 
 app.post('/adminpanel',(req, res)=>{
 
     const {name, password} = req.body
 
     if(name===admin_details.name1 && password === admin_details.password1){
-        res.render('adminpanel')
-        console.log(`Welcome admin ${name}  and ${password}`);
+        res.render('adminpanel',{name})
+        console.log(`Welcome ${name}`);
     } else {
         res.redirect('/')
         console.log("Invalid credentials of the admin");
