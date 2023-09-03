@@ -9,7 +9,7 @@ const collection = require('./mongodb')
 
 
 const app = express()
-const port = 4000 || process.env.PORT
+const port = 3000 || process.env.PORT
 
 // for parsing the user input data
 app.use(express.urlencoded({extended :true}))
@@ -39,12 +39,12 @@ app.get('/signup',(req, res)=>{
     res.render('signup')
 })
 
-// // admin credentials..
-// const admin_details = {
-//     name :'Nischal',
-//     password : 'red'
-// }
 
+// rendering the admin page
+
+app.get('/admin',(req, res)=>{
+    res.render('admin')
+})
 
 // loading the new values from the signup page to the database 
 
@@ -66,19 +66,19 @@ app.post('/', async(req, res)=>{
 
 // rendering the homepage if username and password is correct
 
-app.post('/home', async(req ,res)=>{
+app.post('/home', async(req ,res ,next)=>{
 
     try{
-        const check = await collection.findOne({name : req.body.name})
-        console.log(check);
-
+        const check = await collection.findOne({name : req.body.name,password : req.body.password})
         
-            if(check.password === req.body.password){
+        console.log(check);
+        
+            if(check.name === req.body.name && check.password === req.body.password){
                 res.render('home')
                 console.log('Welcome user')
+                console.log(check);
             } else {
-                res.redirect('signup')
-                console.log('invalid user')
+               return next();
             }
         
 
@@ -93,16 +93,27 @@ app.post('/home', async(req ,res)=>{
 
 
 
+
+// admin credentials..
+const admin_details = {
+        name1 :'Nischal',
+        password1 : 'red',
+    }
+    
+
+
+
+
+
 // rendering the admin page by the password which is already set
 
-
-app.post('/admin',(req, res)=>{
+app.post('/adminpanel',(req, res)=>{
 
     const {name, password} = req.body
 
-    if(name===admin_details.name && password === admin_details.password){
-        res.render('admin')
-        console.log("Valid admin....!");
+    if(name===admin_details.name1 && password === admin_details.password1){
+        res.render('adminpanel')
+        console.log(`Welcome admin ${name}  and ${password}`);
     } else {
         res.redirect('/')
         console.log("Invalid credentials of the admin");

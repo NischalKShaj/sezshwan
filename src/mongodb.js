@@ -14,7 +14,7 @@ mongoose.connect("mongodb://localhost:27017/userDetail")
 })
 
 
-//Schema of the documents 
+//Schema of the documents of the users
 
 const userCollection = new mongoose.Schema({
     name : {
@@ -29,6 +29,9 @@ const userCollection = new mongoose.Schema({
     }
 
 })
+
+
+
 
 
 // collection name based on the schema 
