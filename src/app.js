@@ -1,21 +1,29 @@
 // importing the modules
 
+require('dotenv').config()
 const express = require('express')
+// const expressLayouts = require('express-ejs-layouts')
 const path = require('path')
 const ejs = require('ejs')
 const collection = require('./mongodb')
 
+
 const app = express()
+const port = 4000 || process.env.PORT
 
 // for parsing the user input data
-
+app.use(express.urlencoded({extended :true}))
 app.use(express.json())
+
+// setting the static files
+
+app.use(express.static('public'))
 
 // setting the view page and the path
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname,'..', 'views'));
-app.use(express.urlencoded({extended :false}))
+
 
 // rendering the login page
 
@@ -31,6 +39,11 @@ app.get('/signup',(req, res)=>{
     res.render('signup')
 })
 
+// // admin credentials..
+// const admin_details = {
+//     name :'Nischal',
+//     password : 'red'
+// }
 
 
 // loading the new values from the signup page to the database 
@@ -70,15 +83,34 @@ app.post('/home', async(req ,res)=>{
         
 
     } catch {
-        res.send('Unexpected error')
+        res.redirect('/')
     }
+
+    
 
 })
 
 
 
+
+// rendering the admin page by the password which is already set
+
+
+app.post('/admin',(req, res)=>{
+
+    const {name, password} = req.body
+
+    if(name===admin_details.name && password === admin_details.password){
+        res.render('admin')
+        console.log("Valid admin....!");
+    } else {
+        res.redirect('/')
+        console.log("Invalid credentials of the admin");
+    }
+})
+
 // connecting with the port
 
-app.listen(4000, ()=>{
-    console.log("Server connected to the port 4000....!");
+app.listen(port, ()=>{
+    console.log(`Server connected to the port ${port}..!`);
 })
