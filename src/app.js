@@ -16,10 +16,17 @@ app.use(express.json())
 
 // session creation
 app.use(session({
-    secret : ' c',
+    secret : 'secretkey',
     saveUninitialized : true,
     resave : false,
 }))
+
+// storing the session message
+app.use((req ,res ,next)=>{
+    res.locals.message = req.session.message
+    delete req.session.message
+    next()
+})
 
 // setting the static files
 app.use(express.static('public'))
@@ -57,6 +64,9 @@ app.post('/', async(req, res)=>{
         const data ={
             name : req.body.name,
             password : req.body.password,
+            email : req.body.email,
+            phone : req.body.phone,
+            
 
             
         }
@@ -72,20 +82,23 @@ app.post('/', async(req, res)=>{
 app.post('/home', async(req ,res ,next)=>{
 
     try{
-        const check = await collection.findOne({name : req.body.name,password : req.body.password})
         
-        console.log(check);
+        const check = await collection.findOne({email : req.body.email,password : req.body.password})
         
-            if(check.name === req.body.name && check.password === req.body.password){
+        console.log("value inserted in the login page..",check);
+        
+            if(check.email === req.body.email && check.password === req.body.password){
                 res.render('home',{check})
-                console.log(`Welcome user :- ${check.name}`)
+                console.log(`Welcome user :- ${check.email}`)
                 console.log(check);
             } else {
+                console.log("hi...");
                return next();
             }
         
 
     } catch {
+        console.log("helo...");
         res.redirect('/')
     }
 
