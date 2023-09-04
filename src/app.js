@@ -1,17 +1,25 @@
 // importing the modules
 require('dotenv').config()
 const express = require('express')
+const session = require('express-session')
 const path = require('path')
 const ejs = require('ejs')
 const collection = require('./mongodb')
 
 
 const app = express()
-const port = 3000 || process.env.PORT
+const PORT = process.env.PORT || 3000
 
 // for parsing the user input data
 app.use(express.urlencoded({extended :true}))
 app.use(express.json())
+
+// session creation
+app.use(session({
+    secret : ' c',
+    saveUninitialized : true,
+    resave : false,
+}))
 
 // setting the static files
 app.use(express.static('public'))
@@ -70,7 +78,7 @@ app.post('/home', async(req ,res ,next)=>{
         
             if(check.name === req.body.name && check.password === req.body.password){
                 res.render('home',{check})
-                console.log('Welcome user')
+                console.log(`Welcome user :- ${check.name}`)
                 console.log(check);
             } else {
                return next();
@@ -88,7 +96,7 @@ app.post('/home', async(req ,res ,next)=>{
 const admin_details = {
         name1 :'Nischal',
         password1 : 'red',
-        role : 'admin'
+       
     }
     
 // rendering the adminpanel with the credentials 
@@ -99,7 +107,7 @@ app.post('/adminpanel',(req, res)=>{
 
     if(name===admin_details.name1 && password === admin_details.password1){
         res.render('adminpanel',{name})
-        console.log(`Welcome ${name}`);
+        console.log(`Welcome admin :- ${name}`);
     } else {
         res.redirect('/')
         console.log("Invalid credentials of the admin");
@@ -108,6 +116,6 @@ app.post('/adminpanel',(req, res)=>{
 
 // connecting with the port
 
-app.listen(port, ()=>{
-    console.log(`Server connected to the port ${port}..!`);
+app.listen(PORT, ()=>{
+    console.log(`Server connected http://localhost${PORT}`);
 })
